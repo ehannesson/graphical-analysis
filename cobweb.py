@@ -54,7 +54,8 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='viridis', *args, **
 
     Parameters:
         f (func): callable function of the form f(x0, *args, **kwargs)
-        x0 (float): orbital seed
+        x0 (float): orbital seed;
+####    TODO: if the orbit is already known, pass in a list to avoid computing the orbit
         iters (int): number of orbit points to calculate
             For iters=n, this finds the list [x0, f(x0), ... , fn(x0)]
         xlim (2-tuple): should be a 2-tuple of floats of the form (x_min, x_max)
