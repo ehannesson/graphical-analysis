@@ -95,6 +95,10 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
 
     # plotting
 
+    # draw x and y axes
+    plt.gca().axhline(color='black', lw=1)
+    plt.gca().axvline(color='black', lw=1)
+
     # create color mapping for cobwebbing lines
     c_map = plt.get_cmap(cmap)
     colors = [c_map(i) for i in np.linspace(0, 1, len(lines))]
@@ -123,8 +127,5 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
     # plot function y=f(x)
     plt.plot(domain, f(domain, *args, **kwargs), color='gray')
 
-    # draw x and y axes
-    plt.gca().axhline(color='black', lw=1)
-    plt.gca().axvline(color='black', lw=1)
 
     plt.show()
