@@ -47,7 +47,7 @@ def iterate_dynamics(f, x0, iters=10, *args, **kwargs):
     else:
         return orbit
 
-def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='viridis', *args, **kwargs):
+def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kwargs):
     """
     Creates a "cobweb" graphical analysis plot of the orbit of x0 under f.
     Only the first iters points of the orbit are calculated and plotted.
@@ -74,23 +74,57 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='viridis', *args, **
     # get orbit of x0 under f
     orbit = iterate_dynamics(f, x0, iters=iters, *args, **kwargs)
     # check for OverflowError
-    if type(orbit) is list:
+    if type(orbit) is tuple:
         orbit = orbit[0]
 
-    # (x0, 0) --> (x0, f(x0)) --> (f(x0), f(x0)) --> (f(x0), f(f(x0)))
-    # (0, _)  --> (0, 1) --> (1, 1) --> (1, 2)
-    #
-    # [(orbit[0], 0), (orbit[0], orbit[1])]
-    # [(orbit[0], orbit[1]), (orbit[1], orbit[1])]
-    # [(orbit[1], orbit[1]), (orbit[1], orbit[2])]
-    # [(orbit[1], orbit[2]), (orbit[2], orbit[2])]
+    min_orb = np.min(orbit)
+    max_orb = np.max(orbit)
 
+    # each element of lines is a tuple
+        # each tuple contains two lists [x1, x2], [y1, y2]
+        # containing the x- and y-coords of each cobweb line
+    lines = [([orbit[0], orbit[0]], [0, orbit[1]])]
+    lines.append(([orbit[0], orbit[1]], [orbit[1], orbit[1]]))
 
+    # extract remaining cobweb lines
+    for i in range(1, len(orbit) - 1):
+        # line (x,x) --> (x, f(x))
+        lines.append(([orbit[i], orbit[i]], [orbit[i], orbit[i+1]]))
+        # line (x, f(x)) --> (f(x), f(x))
+        lines.append(([orbit[i], orbit[i+1]], [orbit[i+1], orbit[i+1]]))
 
+    # plotting
 
     # create color mapping for cobwebbing lines
-    # c_map = plt.get_cmap(cmap)
-    # colors = [c_map(i) for i in np.linspace(0, 1, num_lines)]
-    #
-    # for line, color in zip(lines, colors):
-    #     plt.plot(line, color=color)
+    c_map = plt.get_cmap(cmap)
+    colors = [c_map(i) for i in np.linspace(0, 1, len(lines))]
+
+    # draw cobweb lines
+    for line, color in zip(lines, colors):
+        plt.plot(line[0], line[1], color=color)
+
+    # set the x and y limits
+    if xlim:
+        domain = np.linspace(xlim[0], xlim[1], 500)
+        plt.xlim(xlim)
+    else:
+        xlim = plt.gca().get_xlim()
+        domain = np.linspace(xlim[0], xlim[1], 500)
+
+    if ylim:
+        yrange = np.linspace(ylim[0], ylim[1], 500)
+        plt.ylim(ylim)
+    else:
+        ylim = plt.gca().get_ylim()
+        yrange = np.linspace(ylim[0], ylim[1], 500)
+
+    # plot line y=x
+    plt.plot(domain, yrange, color='gray')
+    # plot function y=f(x)
+    plt.plot(domain, f(domain, *args, **kwargs), color='gray')
+
+    # draw x and y axes
+    plt.gca().axhline(color='black', lw=1)
+    plt.gca().axvline(color='black', lw=1)
+
+    plt.show()
