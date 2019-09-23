@@ -123,9 +123,9 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
         yrange = np.linspace(ylim[0], ylim[1], 500)
 
     # plot line y=x
-    plt.plot(domain, yrange, color='gray')
+    plt.plot(domain, yrange, color='gray', zorder=-1)
     # plot function y=f(x)
-    plt.plot(domain, f(domain, *args, **kwargs), color='gray')
+    plt.plot(domain, f(domain, *args, **kwargs), color='gray', zorder=-1)
 
 
     plt.show()
