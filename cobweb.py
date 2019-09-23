@@ -7,19 +7,20 @@ Script for creating cobweb plots.
 import matplotlib.pyplot as plt
 import numpy as np
 
-def iterate_dynamics(f, x0, iters=10, *args, **kwargs):
+def iterate_dynamics(f, x0, iters=25, *args, **kwargs):
     """
     Numerically calculate the first iters points of the orbit of x0 under f.
 
     Parameters:
         f (func): callable function of the form f(x0, *args, **kwargs)
+            **Must be compatible with numpy broadcasting
         x0 (float): orbital seed
         iters (int): number of orbit points to calculate
-            For iters=n, this finds the list [x0, f(x0), ... , fn(x0)]
+            For iters=n, this finds the list [x0, f(x0), ..., f^n(x0)]
         *args: any additional arguments to be passed to f
         **kwargs: any additional arguments to be passed to f
     Returns:
-        orbit (list): orbit of x0 under f: [x0, f(x0), ... , f^n(x0)]
+        orbit (list): orbit of x0 under f: [x0, f(x0), ..., f^n(x0)]
             If there is an overflow error when calculating f^i(x0), the function
                 will instead return a the tuple (orbit, i-1), where i-1 is the
                 last point successfully calculated.
@@ -47,17 +48,18 @@ def iterate_dynamics(f, x0, iters=10, *args, **kwargs):
     else:
         return orbit
 
-def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kwargs):
+def cobweb_plot(f, x0, iters=25, xlim=None, ylim=None, cmap='magma', title=None, *args, **kwargs):
     """
     Creates a "cobweb" graphical analysis plot of the orbit of x0 under f.
     Only the first iters points of the orbit are calculated and plotted.
 
     Parameters:
         f (func): callable function of the form f(x0, *args, **kwargs)
+            **Must be compatible with numpy broadcasting
         x0 (float): orbital seed;
 ####    TODO: if the orbit is already known, pass in a list to avoid computing the orbit
         iters (int): number of orbit points to calculate
-            For iters=n, this finds the list [x0, f(x0), ... , fn(x0)]
+            For iters=n, this finds the list [x0, f(x0), ..., f^n(x0)]
         xlim (2-tuple): should be a 2-tuple of floats of the form (x_min, x_max)
             This sets the x-axis bounds for plotting.
             If None, uses the matplotlib defaults.
@@ -68,6 +70,7 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
             time (iterations) with cobwebbing lines.
             Suggested color maps include:
                 viridis, plasma, inferno, magma, and cividis
+        title (str): graph title
         *args: any additional arguments to be passed to f
         **kwargs: any additional arguments to be passed to f
     """
@@ -102,10 +105,11 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
     # create color mapping for cobwebbing lines
     c_map = plt.get_cmap(cmap)
     colors = [c_map(i) for i in np.linspace(0, 1, len(lines))]
-
+    # cobweb lines get thinner as we iterate further
+    lwidth = np.linspace(1.5, 1, len(lines))
     # draw cobweb lines
-    for line, color in zip(lines, colors):
-        plt.plot(line[0], line[1], color=color)
+    for line, color, lw in zip(lines, colors, lwidth):
+        plt.plot(line[0], line[1], color=color, lw=lw)
 
     # set the x and y limits
     if xlim:
@@ -123,9 +127,11 @@ def cobweb_plot(f, x0, iters=10, xlim=None, ylim=None, cmap='magma', *args, **kw
         yrange = np.linspace(ylim[0], ylim[1], 500)
 
     # plot line y=x
-    plt.plot(domain, yrange, color='gray', zorder=-1)
+    plt.plot(domain, domain, color='gray', zorder=-1)
     # plot function y=f(x)
     plt.plot(domain, f(domain, *args, **kwargs), color='gray', zorder=-1)
 
+    if title:
+        plt.title(title)
 
     plt.show()
