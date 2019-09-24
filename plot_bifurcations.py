@@ -39,4 +39,5 @@ def plot_bifurcation(f, iters=300, asym=200, max_cycle=16, tol=1e-5, n=500,
 
     plt.xlabel(r'$Parameter Value$')
     plt.ylabel(r'$x-Value$')
+    plt.scaled()
     plt.show()
