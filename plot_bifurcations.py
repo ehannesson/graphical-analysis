@@ -9,7 +9,7 @@ from asymptotic_behavior import asym_orbit_behavior
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_bifurcation(f, iters=300, asym=200, max_cycle=16, tol=1e-5, n=5,
+def plot_bifurcation(f, iters=300, asym=200, max_cycle=16, tol=1e-5, n=500,
                         cmap='viridis_r', *args, **kwargs):
 
     behavior = []
@@ -37,6 +37,6 @@ def plot_bifurcation(f, iters=300, asym=200, max_cycle=16, tol=1e-5, n=5,
         else:
             plt.plot([orb[0]]*len(orb[1][1]), orb[1][1], linestyle=' ', marker=',', color='black')
 
-    plt.xlabel(r'$c$')
-    plt.ylabel(r'$x$')
+    plt.xlabel(r'$Parameter Value$')
+    plt.ylabel(r'$x-Value$')
     plt.show()
