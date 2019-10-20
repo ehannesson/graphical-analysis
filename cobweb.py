@@ -7,7 +7,7 @@ Script for creating cobweb plots.
 import matplotlib.pyplot as plt
 import numpy as np
 
-def iterate_dynamics(f, x0, iters=25, *args, **kwargs):
+def iterate_dynamics(f, x0, *args, iters=25, **kwargs):
     """
     Numerically calculate the first iters points of the orbit of x0 under f.
 
@@ -48,7 +48,7 @@ def iterate_dynamics(f, x0, iters=25, *args, **kwargs):
     else:
         return orbit
 
-def cobweb_plot(f, x0, iters=25, xlim=None, ylim=None, cmap='magma', title=None, *args, **kwargs):
+def cobweb_plot(f, x0, *args, iters=25, xlim=None, ylim=None, cmap='magma', title=None, **kwargs):
     """
     Creates a "cobweb" graphical analysis plot of the orbit of x0 under f.
     Only the first iters points of the orbit are calculated and plotted.
@@ -58,6 +58,7 @@ def cobweb_plot(f, x0, iters=25, xlim=None, ylim=None, cmap='magma', title=None,
             **Must be compatible with numpy broadcasting
         x0 (float): orbital seed;
 ####    TODO: if the orbit is already known, pass in a list to avoid computing the orbit
+        *args: any additional arguments to be passed to f
         iters (int): number of orbit points to calculate
             For iters=n, this finds the list [x0, f(x0), ..., f^n(x0)]
         xlim (2-tuple): should be a 2-tuple of floats of the form (x_min, x_max)
@@ -71,7 +72,6 @@ def cobweb_plot(f, x0, iters=25, xlim=None, ylim=None, cmap='magma', title=None,
             Suggested color maps include:
                 viridis, plasma, inferno, magma, and cividis
         title (str): graph title
-        *args: any additional arguments to be passed to f
         **kwargs: any additional arguments to be passed to f
     """
     # get orbit of x0 under f
