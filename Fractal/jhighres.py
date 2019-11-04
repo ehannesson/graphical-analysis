@@ -1,5 +1,6 @@
 # jhighres.py
 import numpy as np
+from numba import njit
 from julia_sets import plot_julia
 import os
 import re
@@ -11,6 +12,7 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
+# @njit(nopython=True)
 def high_res_julia(f, window, outfile, splits=3, iters=25, res=(3000, 3000), N=5,
                     cmap='gist_rainbow', dpi=600, sub_path='Graphics/subfigs/',
                     save=False):
