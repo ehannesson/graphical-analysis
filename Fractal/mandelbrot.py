@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import progressbar
+#import progressbar
 import pickle
 import os
 import warnings
@@ -10,10 +10,10 @@ warnings.filterwarnings('ignore')
 
 def mandel_set(iters=50, N=5, k=2, res=(4096, 2844), window=(-2.4, 1, -1.18, 1.18),
                 save=False, downsample=False, verbose=True):
-    if verbose:
-        iters = progressbar.progressbar(range(iters))
-    else:
-        iters = range(iters)
+#    if verbose:
+#        iters = progressbar.progressbar(range(iters))
+#    else:
+    iters = range(iters)
 
     # create meshgrid of our *c* values
     x = np.linspace(window[0], window[1], res[0])
@@ -74,6 +74,7 @@ def plot_mandel(cmap='jet', shading='gouraud', iters=50, N=5, k=2, escape=None,
                 plot=True, savefig=False, **kwargs):
     if not plot:
         matplotlib.use('Agg')
+        plt.switch_backend('Agg')
     if escape is None:
         X, Y, escape = mandel_set(iters=iters, N=N, k=k, res=res, window=window, **kwargs)
     else:
@@ -161,14 +162,14 @@ def gen_zoom_data(center, save_folder, window_len=(3.6, 2.025), rate=0.95,
     # find required iterations
     needed_iters = int(np.ceil(np.log(end_width/xd)/np.log(rate))) + 1
 
-    if verbose is True:
-        needed_iters = progressbar.progressbar(range(1, needed_iters))
-        verbose = False
-    elif verbose is False:
-        needed_iters = range(1, needed_iters)
-        verbose = True
-    else:
-        needed_iters = range(1, needed_iters)
+#    if verbose is True:
+#        needed_iters = progressbar.progressbar(range(1, needed_iters))
+#        verbose = False
+#    elif verbose is False:
+    needed_iters = range(1, needed_iters)
+#     verbose = True
+#    else:
+#        needed_iters = range(1, needed_iters)
 
     # iterate until xd < end_width
     for image in needed_iters:
@@ -203,8 +204,8 @@ def gen_zoom_images(data_folder, save_folder, cmap='inferno', dpi=600,
     """
     images = os.listdir(data_folder)
     images.sort()
-    if verbose:
-        images = progressbar.progressbar(images)
+#    if verbose:
+#        images = progressbar.progressbar(images)
 
     for image in images:
         try:
