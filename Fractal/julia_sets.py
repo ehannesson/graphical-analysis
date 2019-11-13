@@ -107,28 +107,9 @@ def plot_julia(f, window, *args, iters=25, vmax=None, res=(1000, 1000), N=2, cma
         print('Saving figure')
         stime = time.time()
         plt.savefig('jet' + '-' + savefig, bbox_inches='tight', pad_inches=0, dpi=dpi)
-############### JUST FOR SAVING TWO CMAPS AT ONCE; REMOVE WHEN FINISHED ###############
-        plt.clf()
-        cmap = plt.get_cmap('rainbow')
 
-        cmap.set_bad(color='black')
-
-        plt.pcolormesh(orbits,
-                        shading=shading,
-                        norm=matplotlib.colors.LogNorm(vmin=1, vmax=vmax),
-                        cmap=cmap)
-
-        plt.axis('off')
-        plt.gca().axis('image')
-        plt.savefig('rainbow' + '-' + savefig, bbox_inches='tight', pad_inches=0, dpi=dpi)
-#######################################################################################
-        print(time.time() - stime)
+    print(time.time() - stime)
     if plot:
         plt.show()
 
-# f=lambda z:z**2-1.3272987236
-# x_center = 1.9731069e-8
-# y_center = 0.654679910010988
-# j = 1e-13
-# window = (x_center-j, x_center+j, y_center-j, y_center+j)
-# plot_julia(f, window, iters=200, res=(2000,2000), cmap='hsv')
+
